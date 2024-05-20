@@ -4,12 +4,23 @@
 // Make me compile and pass the test!
 // Execute `starklings hint dict2` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
+use core::dict::Felt252DictEntryTrait;
+use core::traits::PartialOrd;
 
 fn multiply_element_by_10(ref dict: Felt252Dict<u32>, n: usize) {
     //TODO : make a function that multiplies the elements stored at the indexes 0 to n of a dictionary by 10
+    let mut i: usize = 0;
 
+    loop {
+        if i > n {
+            break;
+        }
+
+        let (entry, _prev) = dict.entry(i.into());
+        dict = entry.finalize(_prev * 10);
+
+        i += 1;        
+    }
 
 }
 

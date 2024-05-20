@@ -2,12 +2,14 @@
 // Address all the TODOs to make the tests pass!
 // Execute `starklings hint enums3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 use debug::PrintTrait;
 
 #[derive(Drop, Copy)]
 enum Message { // TODO: implement the message variant types based on their usage below
+    Quit,
+    Echo: felt252, 
+    Move: Point,
+    ChangeColor: (u8, u8, u8),
 }
 
 #[derive(Drop, Copy)]
@@ -49,9 +51,13 @@ impl StateImpl of StateTrait {
         self = State { color: color, position: p, quit: quit, };
     }
 
-    fn process(
-        ref self: State, message: Message
-    ) { // TODO: create a match expression to process the different message variants
+    fn process(ref self: State, message: Message) { // TODO: create a match expression to process the different message variants        
+        match message {
+            Message::Quit => self.quit(),
+            Message::Echo(msg) => self.echo(msg),
+            Message::Move(point) => self.move_position(point),
+            Message::ChangeColor(c) => self.change_color(c),
+        }
     }
 }
 
@@ -64,7 +70,7 @@ fn test_match_message_call() {
     state.process(Message::Move(Point { x: 10, y: 15 }));
     state.process(Message::Quit);
 
-    assert(state.color == (255, 0, 255), 'wrong color');
+    assert(state.color == (255, 0, 255), 'wrong color'); 
     assert(state.position.x == 10, 'wrong x position');
     assert(state.position.y == 15, 'wrong y position');
     assert(state.quit == true, 'quit should be true');
